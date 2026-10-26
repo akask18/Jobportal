@@ -1,0 +1,65 @@
+
+{% extends "base.html" %}
+
+{% block title %}Find Jobs | Nepal Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="fw-bold mb-4">Find Your Next Job</h1>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="q" value="{{ search_query }}"
+                   class="form-control"
+                   placeholder="Search job title or location">
+        </div>
+
+        <div class="col-md-4">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}"
+                    {% if selected_category == category.id|stringformat:"s" %}
+                        selected
+                    {% endif %}>
+                    {{ category.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">
+                Search and Filter
+            </button>
+        </div>
+    </form>
+
+    <p class="text-secondary">{{ jobs|length }} jobs found</p>
+
+    <div class="row g-3">
+        {% for job in jobs %}
+        <div class="col-12">
+            <div class="card job-card shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold">{{ job.title }}</h5>
+                    <p class="mb-1">{{ job.company.company_name }}</p>
+                    <p class="text-secondary">
+                        {{ job.location }} · {{ job.category.name }}
+                    </p>
+                    <p>{{ job.description|truncatewords:25 }}</p>
+                    <a href="{% url 'job_detail' job.id %}"
+                       class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning">
+                No jobs match your search. Try another keyword or category.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} | Nepal Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card job-card shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <span class="badge text-bg-primary">
+                {{ job.category.name }}
+            </span>
+
+            <h1 class="fw-bold mt-3">{{ job.title }}</h1>
+            <h5>{{ job.company.company_name }}</h5>
+
+            <p class="text-secondary">
+                📍 {{ job.location }} |
+                💼 {{ job.get_job_type_display }}
+            </p>
+
+            <p>
+                <strong>Salary:</strong>
+                {% if job.salary %}
+                    NPR {{ job.salary|floatformat:0 }}
+                {% else %}
+                    Negotiable
+                {% endif %}
+            </p>
+
+            {% if job.deadline %}
+            <p><strong>Application deadline:</strong> {{ job.deadline }}</p>
+            {% endif %}
+
+            <hr>
+
+            <h4>Job Description</h4>
+            <p>{{ job.description|linebreaks }}</p>
+
+            <h4 class="mt-4">Requirements</h4>
+            <p>{{ job.requirements|default:"Not specified"|linebreaks }}</p>
+
+            <a href="{% url 'job_list' %}"
+               class="btn btn-outline-primary mt-3">Back to Jobs</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
